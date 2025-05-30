@@ -19,8 +19,7 @@ Este repositorio contiene mi configuración personal para un entorno de desarrol
 *   `.gitconfig`: Configuración global de Git.
 *   `.config/`: Contiene configuraciones que siguen la especificación XDG.
     *   `nvim/`: Configuración completa de Neovim (Lua).
-    *   `kitty/`: Configuración de Kitty (`kitty.conf` y temas).
-    *   `Code/User/`: Configuraciones de usuario de VS Code (`settings.json`, `keybindings.json`).
+    *   `kitty/`: Configuración de Kitty (`kitty.conf` y temas).    
     *   `containers/`: Configuraciones de Podman (`registries.conf`, `policy.json`).
 *   `.vscode/extensions/`:
     *   `kittynordic-theme/`: Mi tema personalizado para VS Code "Kitty Nordic Theme".
