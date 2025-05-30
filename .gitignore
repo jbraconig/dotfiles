@@ -1,0 +1,8 @@
+*.swp
+*.bak
+*~
+# /intellij_settings/ # Comenta si guardas y versionas el .zip de IntelliJ
+# .env
+# secrets.*
+# creds.*
+# .docker/config.json # Si contiene secretos

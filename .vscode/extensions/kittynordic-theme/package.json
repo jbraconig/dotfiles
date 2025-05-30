@@ -1,0 +1,21 @@
+{
+  "name": "kittynordic-theme",
+  "displayName": "KittyNordic",
+  "description": "Mi tema KittyNordic personalizado",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "vscode-colors",
+        "uiTheme": "vs-dark",
+        "path": "./themes/vscode-colors-color-theme.json"
+      }
+    ]
+  }
+}

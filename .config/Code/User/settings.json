@@ -1,0 +1,147 @@
+{
+    "cSpell.language": "en,es-ES",
+    "terminal.integrated.env.linux": {},
+    "workbench.colorTheme":"vscode-colors",
+    "editor.fontFamily":"HackNerdFont",
+    "editor.fontLigatures":true,
+    "editor.cursorStyle":"block",
+    "editor.cursorWidth": 2,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[rpgle]":{"editor.tabSize": 5,"editor.insertSpaces": true},
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "redhat.telemetry.enabled": true,
+    "zowe.settings.version": 2,
+    "files.associations": {
+        "*.COBOL*": "cobol",
+        "*.COB*": "cobol",
+        "*.COBCOPY*": "cobol",
+        "*.COPYBOOK*": "cobol",
+        "*.COPY*": "cobol",
+        "*.PL1*": "pl1",
+        "*.PLI*": "pl1",
+        "*.INC*": "pl1",
+        "*.INCLUDE*": "pl1",
+        "*.JCL*": "jcl",
+        "*.ASM*": "hlasm",
+        "*.ASSEMBLE*": "hlasm",
+        "*.HLASM*": "hlasm",
+        "*.HLA*": "hlasm",
+        "*.MACLIB*": "hlasm",
+        "*.DBD*": "hlasm",
+        "*.MFS*": "hlasm",
+        "*.PCB*": "hlasm",
+        "*.EXEC*": "rexx",
+        "*.REXX*": "rexx",
+        "*.REXXINC*": "rexx",
+        "*.rex": "rexx",
+        "*.rexx": "rexx",
+        "*.rpgle": "rpgle"
+    },
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/zapp.json"
+            ],
+            "url": "file:///home/braconi/.vscode/extensions/ibm.zopeneditor-4.5.1/resources/zapp-schema-1.2.1.json"
+        },
+        {
+            "fileMatch": [
+                "/zcodeformat.json"
+            ],
+            "url": "file:///home/braconi/.vscode/extensions/ibm.zopeneditor-4.5.1/resources/zcodeformat-schema-0.0.1.json"
+        }
+    ],
+    "zowe.ds.templates": [],
+    "code-for-ibmi.connections": [
+        {
+            "name": "as400",
+            "host": "pub400.com",
+            "port": 2222,
+            "username": "mbraconig"
+        }
+    ],
+    "code-for-ibmi.connectionSettings": [
+        {
+            "name": "as400",
+            "host": "",
+            "objectFilters": [],
+            "libraryList": [
+                "QGPL",
+                "QTEMP",
+                "GAMES400"
+            ],
+            "autoClearTempData": false,
+            "customVariables": [],
+            "connectionProfiles": [],
+            "commandProfiles": [],
+            "ifsShortcuts": [
+                "/home/MBRACONIG"
+            ],
+            "autoSortIFSShortcuts": false,
+            "homeDirectory": "/home/MBRACONIG",
+            "tempLibrary": "ILEDITOR",
+            "tempDir": "/tmp",
+            "currentLibrary": "MBRACONIG1",
+            "sourceASP": "",
+            "sourceFileCCSID": "*FILE",
+            "autoConvertIFSccsid": false,
+            "hideCompileErrors": [],
+            "enableSourceDates": false,
+            "sourceDateMode": "diff",
+            "sourceDateGutter": false,
+            "encodingFor5250": "default",
+            "terminalFor5250": "default",
+            "setDeviceNameFor5250": false,
+            "connectringStringFor5250": "localhost",
+            "autoSaveBeforeAction": false,
+            "showDescInLibList": false,
+            "debugPort": "8005",
+            "debugSepPort": "8008",
+            "debugUpdateProductionFiles": false,
+            "debugEnableDebugTracing": false,
+            "readOnlyMode": false,
+            "quickConnect": true,
+            "defaultDeploymentMethod": "",
+            "protectedPaths": [],
+            "showHiddenFiles": true,
+            "lastDownloadLocation": "/home/braconi/Documentos/UNIBANCA/Proyecto StandIn/rpg"
+        }
+    ],
+    "workbench.editor.enablePreview": false,
+    "terminal.integrated.sendKeybindingsToShell": true,
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.fontLigatures": true,
+    "editor.wordBreak": "normal",
+    "editor.guides.bracketPairs": true,
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "editor.linkedEditing": true,
+    "explorer.fileNesting.patterns": {
+        "tsconfig": "tsconfig*"
+    },
+    "go.toolsManagement.autoUpdate": true,
+    "cSpell.userWords": [
+        "milisegundos"
+    ],
+    "diffEditor.ignoreTrimWhitespace": false,
+    "workbench.iconTheme": "vscode-icons",
+    "python.defaultInterpreterPath": "/home/braconi/Applications/Anaconda/mini3/bin/python",
+    "terminal.integrated.inheritEnv": false,
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
