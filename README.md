@@ -63,9 +63,6 @@ Este repositorio contiene mi configuración personal para un entorno de desarrol
         *   Otras extensiones pueden necesitar ser instaladas manualmente o sincronizadas si usas la sincronización de settings de VS Code.
     *   **IntelliJ IDEA**: Importa manualmente la configuración desde el archivo `.zip` guardado en `intellij_settings/` (File -> Manage IDE Settings -> Import Settings...).
     *   **Fuentes**: Asegúrate de tener instaladas las fuentes necesarias para Powerlevel10k (ej. MesloLGS NF) y para tu configuración de Kitty/Neovim.
-    *   **Configuración de KDE/Wayland**:
-        *   Temas, iconos, cursores, paneles, atajos de teclado de KDE se configuran a través de las "Preferencias del Sistema" de KDE. Este repositorio no gestiona esos archivos directamente debido a su complejidad y dinamismo. Documenta tus preferencias aquí o usa herramientas de exportación de perfiles de KDE si están disponibles.
-        *   Configuraciones específicas de Wayland pueden depender del gestor de pantalla (SDDM) o configuraciones de KWin.
 
 ## Actualizar Configuraciones
 
