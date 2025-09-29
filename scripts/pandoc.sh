@@ -23,6 +23,15 @@ if [[ "$ruta_completa_entrada" != *.md ]]; then
     exit 1
 fi
 
+# Detect container runtime
+if command -v podman >/dev/null 2>&1; then
+    runtime="podman"
+    image="docker.io/pandoc/core"
+else
+    runtime="docker"
+    image="pandoc/core"
+fi
+
 # Extraer el directorio del archivo de entrada
 directorio_entrada=$(dirname "$ruta_completa_entrada")
 # Si el archivo está en el directorio actual, dirname devuelve "."
@@ -53,10 +62,10 @@ echo "Archivo de salida (en contenedor): $archivo_salida_en_contenedor"
 # Ejecutar el comando de conversión con Pandoc
 # Montamos el directorio del archivo de entrada en /data
 # Pandoc opera con los nombres de archivo relativos a /data dentro del contenedor
-docker run --rm \
+$runtime run --rm \
     --volume "$directorio_entrada_abs:/data" \
     --user "$(id -u):$(id -g)" \
-    pandoc/core "$nombre_archivo_entrada_con_ext" -o "$archivo_salida_en_contenedor"
+    $image "$nombre_archivo_entrada_con_ext" -o "$archivo_salida_en_contenedor"
 
 # Construir la ruta completa del archivo de salida para el mensaje final
 ruta_completa_salida="$directorio_entrada_abs/$archivo_salida_en_contenedor"

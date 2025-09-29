@@ -3,7 +3,7 @@
   "colors": {
     "editor.background": "#21252B",
     "editor.foreground": "#D8DEE9",
-    "editorCursor.foreground": "#88C0D0",
+    "editorCursor.foreground": "#ECEFF4",
     "editor.selectionBackground": "#434C5E",
     "editor.selectionForeground": "#ECEFF4",
     "editor.lineHighlightBackground": "#2E344099",
@@ -113,7 +113,7 @@
     "terminal.ansiBrightCyan": "#8FBCBB",
     "terminal.ansiBrightWhite": "#ECEFF4",
     "terminalCursor.background": "#D8DEE9",
-    "terminalCursor.foreground": "#21252B"
+    "terminalCursor.foreground": "#88C0D0"
   },
   "tokenColors": [
     {
