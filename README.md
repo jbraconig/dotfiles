@@ -69,3 +69,17 @@ Este repositorio contiene mi configuración personal para un entorno de desarrol
 ## Contribuciones
 
 Este es mi repositorio personal de dotfiles, pero si tienes sugerencias o mejoras, ¡siéntete libre de abrir un issue o un pull request!
+
+
+Programas:
+    zsh: plugins zsh-autosuggestions, zsh-history-substring-search , fzf y zsh-syntax-highlighting.
+    Angular.
+    node.
+    lsd.
+    bat.
+    vscode.
+    Idea JetBrains Community (Se ejecuta desde Applications/idea-IC-242.21829.142, hay que crear el .desktop).
+    gotdot (Se ejecuta desde /Applications/godot, hay que crear el .desktop).
+    podman.
+    blender
+    obs.
