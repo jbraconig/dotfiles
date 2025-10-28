@@ -21,8 +21,12 @@ bindkey '^f' fzf-history-widget
 bindkey -e
 bindkey "^[[1;2C" forward-word
 bindkey "^[[1;2D" backward-word
-#bindkey "^[[A" up-line-or-beginning-search
-#bindkey "^[[B" down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
+bindkey '^w' backward-kill-word
+bindkey '^u' kill-whole-line
+bindkey '^t' transpose-chars
+bindkey '^l' clear-screen
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
@@ -36,8 +40,13 @@ compinit
 # PATH
 export JAVA_HOME=/home/martin/.jdks/corretto-17.0.16
 export JAVA_BIN=$JAVA_HOME/bin
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH="$PATH:/usr/local/go/bin:$JAVA_HOME:$JAVA_BIN:$HOME/.local/bin"
 export PATH=$PATH:$(go env GOPATH)/bin
+export PATH=$PATH:/opt/nvim
+
 # usar bat como pager para man y otras herramientas
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 export PAGER="batcat -p"

@@ -22,14 +22,13 @@ configure_configs() {
 
     echo "Configurando Zsh..."
     ln -sf "$DOTFILES_DIR/.zshrc" "$USER_HOME/.zshrc"
-    ln -sf "$DOTFILES_DIR/zsh" "$USER_HOME/.zsh"
 }
 
 configure_scripts() {
     if [ -d "$DOTFILES_DIR/scripts" ] && [ "$(ls -A "$DOTFILES_DIR/scripts")" ]; then
         echo "Creando enlaces simbólicos para scripts en /usr/local/bin/ (puede requerir sudo)..."
         chmod +x "$DOTFILES_DIR/scripts/"*
-        
+
         read -p "¿Deseas crear los enlaces simbólicos en /usr/local/bin usando sudo? (s/N): " response
         if [[ "$response" =~ ^([sS][iI]?|[yY])$ ]]; then
             for script in "$DOTFILES_DIR/scripts/"*; do
@@ -46,9 +45,67 @@ configure_scripts() {
     fi
 }
 
+configure_plugins() {
+    echo "Configurando plugins de Zsh..."
+
+    # Zsh Autosuggestions
+    if [ ! -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+        echo "Instalando zsh-autosuggestions..."
+        sudo mkdir -p "/usr/share/zsh-autosuggestions"
+        sudo ln -sf "$DOTFILES_DIR/plugins-zsh/zsh-autosuggestions.zsh" "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    else
+        echo "zsh-autosuggestions ya está instalado."
+    fi
+
+    # Zsh History Substring Search
+    if [ ! -f "/usr/share/zsh/plugins/zsh-history-substring-search.zsh" ]; then
+        echo "Instalando zsh-history-substring-search..."
+        sudo mkdir -p "/usr/share/zsh/plugins"
+        sudo ln -sf "$DOTFILES_DIR/plugins-zsh/zsh-history-substring-search.zsh" "/usr/share/zsh/plugins/zsh-history-substring-search.zsh"
+    else
+        echo "zsh-history-substring-search ya está instalado."
+    fi
+
+    # Powerlevel10k
+    if [ ! -d "$USER_HOME/powerlevel10k" ]; then
+        echo "Instalando Powerlevel10k..."
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$USER_HOME/powerlevel10k"
+    else
+        echo "Powerlevel10k ya está instalado."
+    fi
+
+
+    # Zsh Syntax Highlighting
+    if [ ! -f "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+        echo "Instalando zsh-syntax-highlighting..."
+        sudo mkdir -p "/usr/share/zsh-syntax-highlighting"
+        sudo ln -sf "$DOTFILES_DIR/plugins-zsh/zsh-syntax-highlighting.zsh" "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    else
+        echo "zsh-syntax-highlighting ya está instalado."
+    fi
+
+    echo "Configuración de plugins completada."
+}
+
+configure_system() {
+    if [ -f "$DOTFILES_DIR/setup_amd_debian13.sh" ]; then
+        echo "Configuración del sistema AMD para Debian 13 (requiere sudo)..."
+        read -p "¿Deseas ejecutar la configuración del sistema AMD usando sudo? (s/N): " response
+        if [[ "$response" =~ ^([sS][iI]?|[yY])$ ]]; then
+            bash "$DOTFILES_DIR/setup_amd_debian13.sh"
+        else
+            echo "Se omitió la configuración del sistema AMD."
+        fi
+    else
+        echo "Script de configuración del sistema no encontrado: $DOTFILES_DIR/setup_amd_debian13.sh"
+    fi
+}
+
 run_all() {
     configure_configs
     configure_scripts
+    configure_plugins
+    configure_system
     echo "Configuración de dotfiles completada."
     echo "Reinicia tu terminal para que los cambios surtan efecto."
 }
@@ -91,10 +148,36 @@ validate_config() {
         echo "✗ .zshrc no está configurado o el enlace simbólico es incorrecto."
     fi
 
-    if [ -L "$USER_HOME/.zsh" ] && [ "$(readlink "$USER_HOME/.zsh")" = "$DOTFILES_DIR/zsh" ]; then
-        echo "✓ Directorio zsh configurado correctamente."
+    # Check Zsh plugins
+    if [ -L "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && [ "$(readlink "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh")" = "$DOTFILES_DIR/plugins-zsh/zsh-autosuggestions.zsh" ]; then
+        echo "✓ zsh-autosuggestions configurado correctamente."
+    elif [ -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+        echo "✓ zsh-autosuggestions instalado (no es enlace de dotfiles)."
     else
-        echo "✗ Directorio zsh no está configurado o el enlace simbólico es incorrecto."
+        echo "✗ zsh-autosuggestions no está instalado."
+    fi
+
+    if [ -L "/usr/share/zsh/plugins/zsh-history-substring-search.zsh" ] && [ "$(readlink "/usr/share/zsh/plugins/zsh-history-substring-search.zsh")" = "$DOTFILES_DIR/plugins-zsh/zsh-history-substring-search.zsh" ]; then
+        echo "✓ zsh-history-substring-search configurado correctamente."
+    elif [ -f "/usr/share/zsh/plugins/zsh-history-substring-search.zsh" ]; then
+        echo "✓ zsh-history-substring-search instalado (no es enlace de dotfiles)."
+    else
+        echo "✗ zsh-history-substring-search no está instalado."
+    fi
+
+    if [ -d "$USER_HOME/powerlevel10k" ] && [ -f "$USER_HOME/powerlevel10k/powerlevel10k.zsh-theme" ]; then
+        echo "✓ Powerlevel10k configurado correctamente."
+    else
+        echo "✗ Powerlevel10k no está instalado."
+    fi
+
+
+    if [ -L "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && [ "$(readlink "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh")" = "$DOTFILES_DIR/plugins-zsh/zsh-syntax-highlighting.zsh" ]; then
+        echo "✓ zsh-syntax-highlighting configurado correctamente."
+    elif [ -f "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+        echo "✓ zsh-syntax-highlighting instalado (no es enlace de dotfiles)."
+    else
+        echo "✗ zsh-syntax-highlighting no está instalado."
     fi
 
     # Check scripts
@@ -120,25 +203,33 @@ while true; do
     echo ""
     echo "Menú de instalación de dotfiles:"
     echo "1. Configurar configuraciones (.config, Neovim, Kitty, VS Code tema, Zsh)"
-    echo "2. Configurar scripts (enlaces en /usr/local/bin)"
-    echo "3. Ejecutar todo (configuraciones y scripts)"
-    echo "4. Validar configuración"
-    echo "5. Salir"
-    read -p "Elige una opción (1-5): " choice
+    echo "2. Configurar plugins de Zsh"
+    echo "3. Configurar sistema AMD (Debian 13)"
+    echo "4. Configurar scripts (enlaces en /usr/local/bin)"
+    echo "5. Ejecutar todo (configuraciones, plugins, sistema y scripts)"
+    echo "6. Validar configuración"
+    echo "7. Salir"
+    read -p "Elige una opción (1-7): " choice
     case $choice in
         1)
             configure_configs
             ;;
         2)
-            configure_scripts
+            configure_plugins
             ;;
         3)
-            run_all
+            configure_system
             ;;
         4)
-            validate_config
+            configure_scripts
             ;;
         5)
+            run_all
+            ;;
+        6)
+            validate_config
+            ;;
+        7)
             echo "Saliendo..."
             exit 0
             ;;

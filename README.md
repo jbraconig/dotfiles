@@ -19,6 +19,8 @@ Este repositorio contiene mi configuración personal para un entorno de desarrol
 *   `install.sh`: Script para crear enlaces simbólicos y configurar el entorno.
 *   `README.md`: Este archivo.
 *   `.gitignore`: Especifica archivos y directorios ignorados por Git.
+*   `plugins-zsh/`: Plugins personalizados para Zsh.
+*   `.zshrc`: Configuración de Zsh.
 
 ## Instalación
 
@@ -26,7 +28,7 @@ Este repositorio contiene mi configuración personal para un entorno de desarrol
     Asegúrate de tener `git` instalado.
 
     ```bash
-    git clone https://github.com/jbraconig/dotfiles.git ~/dotfiles
+    git clone https://github.com/martin/dotfiles.git ~/dotfiles
     cd ~/dotfiles
     ```
 
@@ -83,3 +85,50 @@ Programas:
     podman.
     blender
     obs.
+    bruno.
+
+## Instalación de Programas
+
+Para instalar los programas listados anteriormente en Debian 13, ejecuta los siguientes comandos. Asegúrate de tener `sudo` configurado y actualiza los paquetes primero con `sudo apt update`.
+
+### Zsh y plugins
+```bash
+sudo apt install zsh zsh-autosuggestions zsh-history-substring-search fzf zsh-syntax-highlighting
+```
+
+### Node.js y Angular
+```bash
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+npm install -g @angular/cli
+```
+
+### Herramientas adicionales
+```bash
+sudo apt install bat podman blender obs-studio
+```
+
+### LSD
+Descarga la última versión desde https://github.com/lsd-rs/lsd/releases y extrae el binario a `/usr/local/bin/`, o instala via Cargo si tienes Rust:
+```bash
+cargo install lsd
+```
+
+### VS Code
+Añade el repositorio de Microsoft y instala:
+```bash
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+sudo apt update
+sudo apt install code
+```
+
+### IntelliJ IDEA Community
+Descarga desde https://www.jetbrains.com/idea/download/?section=linux y sigue las instrucciones de instalación.
+
+### Godot
+Descarga desde https://godotengine.org/download/linux/ y extrae el archivo.
+
+### Bruno
+Descarga desde https://www.usebruno.com/downloads y sigue las instrucciones de instalación.
