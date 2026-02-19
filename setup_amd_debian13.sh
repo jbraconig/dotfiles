@@ -1,9 +1,39 @@
 #!/bin/bash
-# Script de configuración para AMD en Debian 13
+# Script de configuración completo para Debian 13 (AMD + Dotfiles Dependencies)
 # Requiere sudo para instalar paquetes
 
 echo "🔄 Actualizando lista de paquetes..."
 sudo apt update && sudo apt upgrade -y
+
+echo "🛠️  Instalando dependencias base del sistema..."
+sudo apt install -y zsh fzf unzip git curl wget build-essential
+
+echo "📦 Instalando herramientas modernas (Rust alternatives)..."
+# Debian 13 (Trixie) debería tener paquetes recientes.
+# Si bat o lsd no están, se podrían instalar via cargo, pero probamos apt primero.
+sudo apt install -y bat lsd
+
+# Hack para que batcat sea accesible como bat
+if command -v batcat &> /dev/null; then
+    mkdir -p ~/.local/bin
+    ln -sf /usr/bin/batcat ~/.local/bin/bat
+    echo "🔗 Enlace 'bat' -> 'batcat' creado en ~/.local/bin"
+fi
+
+echo "🅰️  Instalando fuentes (Hack Nerd Font)..."
+FONT_DIR="$HOME/.local/share/fonts"
+mkdir -p "$FONT_DIR"
+if [ ! -f "$FONT_DIR/HackNerdFont-Regular.ttf" ]; then
+    echo "Descargando Hack Nerd Font..."
+    wget -qO /tmp/Hack.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip
+    unzip -o -q /tmp/Hack.zip -d "$FONT_DIR"
+    rm /tmp/Hack.zip
+    echo "Actualizando caché de fuentes..."
+    fc-cache -fv
+    echo "✅ Fuente Hack Nerd Font instalada."
+else
+    echo "✅ Hack Nerd Font ya está instalada."
+fi
 
 echo "📦 Instalando firmware y microcódigo AMD..."
 sudo apt install -y firmware-amd-graphics firmware-linux firmware-linux-nonfree amd64-microcode
@@ -31,5 +61,5 @@ glxinfo | grep "direct rendering" && echo "✅ Aceleración 3D habilitada" || ec
 echo "🔍 Comprobando soporte Vulkan..."
 vulkaninfo | grep "apiVersion" && echo "✅ Soporte Vulkan habilitado" || echo "⚠️ No se encontró soporte Vulkan"
 
-echo "♻️ Reinicia el sistema para aplicar todos los cambios."
-echo "✅ Configuración AMD en Debian 13 finalizada."
+echo "✅ Configuración de sistema y dependencias finalizada."
+echo "ℹ️  Recuerda reiniciar para cargar drivers y fuentes correctamente."

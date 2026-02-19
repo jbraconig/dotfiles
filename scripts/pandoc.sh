@@ -1,14 +1,15 @@
 #!/bin/bash
 
-# Verificar que se pase el argumento correcto
-if [ "$#" -ne 1 ]; then
-    echo "Uso: $0 <ruta-completa-al-archivo.md>"
-    echo "Ejemplo: $0 /home/usuario/documentos/mi_informe.md"
+# Verificar que se pasen los argumentos correctos
+if [ "$#" -ne 2 ]; then
+    echo "Uso: $0 <ruta-completa-al-archivo-entrada> <ruta-completa-al-archivo-salida>"
+    echo "Ejemplo: $0 /home/usuario/documentos/mi_informe.md /home/usuario/documentos/mi_informe.docx"
+    echo "Ejemplo: $0 /home/usuario/documentos/mi_informe.html /home/usuario/documentos/mi_informe.pdf"
     exit 1
 fi
 
-# Asignar argumento a variable
 ruta_completa_entrada="$1"
+ruta_completa_salida="$2"
 
 # Verificar si el archivo de entrada existe
 if [ ! -f "$ruta_completa_entrada" ]; then
@@ -16,63 +17,54 @@ if [ ! -f "$ruta_completa_entrada" ]; then
     exit 1
 fi
 
-# Verificar si el archivo tiene la extensión .md
-if [[ "$ruta_completa_entrada" != *.md ]]; then
-    echo "Error: El archivo de entrada debe tener la extensión .md."
-    echo "Proporcionado: $ruta_completa_entrada"
-    exit 1
+# Verificar o crear el directorio de salida
+directorio_salida=$(dirname "$ruta_completa_salida")
+if [ ! -d "$directorio_salida" ]; then
+    mkdir -p "$directorio_salida"
 fi
 
-# Detect container runtime
+# Detectar contenedor disponible
 if command -v podman >/dev/null 2>&1; then
     runtime="podman"
-    image="docker.io/pandoc/core"
 else
     runtime="docker"
-    image="pandoc/core"
 fi
 
-# Extraer el directorio del archivo de entrada
+# Seleccionar imagen según extensión de salida
+extension_salida="${ruta_completa_salida##*.}"
+case "$extension_salida" in
+    pdf)
+        image="docker.io/pandoc/latex"
+        ;;
+    *)
+        image="docker.io/pandoc/core"
+        ;;
+esac
+
+# Determinar paths absolutos
 directorio_entrada=$(dirname "$ruta_completa_entrada")
-# Si el archivo está en el directorio actual, dirname devuelve "."
-# Docker maneja bien "." como ruta de volumen
-if [ "$directorio_entrada" == "." ]; then
-    directorio_entrada_abs=$(pwd) # Usar path absoluto para mayor claridad si es "."
-else
-    directorio_entrada_abs="$directorio_entrada"
-fi
+directorio_entrada_abs=$(realpath "$directorio_entrada")
+directorio_salida_abs=$(realpath "$directorio_salida")
 
-
-# Extraer el nombre del archivo de entrada (con extensión)
 nombre_archivo_entrada_con_ext=$(basename "$ruta_completa_entrada")
-
-# Extraer el nombre base del archivo (sin extensión .md)
-# Esto se hace para que "archivo.md" se convierta en "archivo"
-nombre_base_entrada="${nombre_archivo_entrada_con_ext%.md}"
-
-# Definir el nombre del archivo de salida (con extensión .docx)
-# Este nombre será usado DENTRO del contenedor, relativo a /data
-archivo_salida_en_contenedor="$nombre_base_entrada.docx"
+nombre_archivo_salida_con_ext=$(basename "$ruta_completa_salida")
 
 echo "Procesando archivo: $ruta_completa_entrada"
-echo "Directorio a montar: $directorio_entrada_abs"
-echo "Archivo de entrada (en contenedor): $nombre_archivo_entrada_con_ext"
-echo "Archivo de salida (en contenedor): $archivo_salida_en_contenedor"
+echo "Usando contenedor: $image"
+echo "Directorio de entrada a montar: $directorio_entrada_abs"
+echo "Directorio de salida a montar: $directorio_salida_abs"
 
-# Ejecutar el comando de conversión con Pandoc
-# Montamos el directorio del archivo de entrada en /data
-# Pandoc opera con los nombres de archivo relativos a /data dentro del contenedor
+# Ejecutar la conversión
 $runtime run --rm \
-    --volume "$directorio_entrada_abs:/data" \
+    -v "$directorio_entrada_abs:/data" \
+    -v "$directorio_salida_abs:/output" \
     --user "$(id -u):$(id -g)" \
-    $image "$nombre_archivo_entrada_con_ext" -o "$archivo_salida_en_contenedor"
+    "$image" "/data/$nombre_archivo_entrada_con_ext" -o "/output/$nombre_archivo_salida_con_ext"
 
-# Construir la ruta completa del archivo de salida para el mensaje final
-ruta_completa_salida="$directorio_entrada_abs/$archivo_salida_en_contenedor"
-
+# Verificar resultado
 if [ -f "$ruta_completa_salida" ]; then
-    echo "Conversión completada: $ruta_completa_salida"
+    echo "✅ Conversión completada: $ruta_completa_salida"
 else
-    echo "Error: La conversión falló o el archivo de salida no se creó en la ubicación esperada: $ruta_completa_salida"
+    echo "❌ Error: La conversión falló o el archivo de salida no se creó: $ruta_completa_salida"
     exit 1
 fi

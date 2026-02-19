@@ -17,16 +17,34 @@ setopt histignorealldups sharehistory
 zle -N fzf-history-widget
 bindkey '^f' fzf-history-widget
 
-# Use emacs keybindings even if our EDITOR is set to vi
-bindkey -e
+# Use vim keybindings
+bindkey -v
+export KEYTIMEOUT=1
 bindkey "^[[1;2C" forward-word
 bindkey "^[[1;2D" backward-word
+# Ctrl+Left/Right for word navigation
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+# Ctrl+Backspace
+# Backspace key
+bindkey '^?' backward-delete-char
+bindkey '^h' backward-delete-char
+
 bindkey "^[[A" up-line-or-beginning-search
 bindkey "^[[B" down-line-or-beginning-search
 bindkey '^w' backward-kill-word
 bindkey '^u' kill-whole-line
 bindkey '^t' transpose-chars
 bindkey '^l' clear-screen
+
+# Vim Mode: History Search (Normal Mode)
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+
+# Edit command in editor (Normal Mode: vv)
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd 'vv' edit-command-line
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
@@ -46,6 +64,10 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH="$PATH:/usr/local/go/bin:$JAVA_HOME:$JAVA_BIN:$HOME/.local/bin"
 export PATH=$PATH:$(go env GOPATH)/bin
 export PATH=$PATH:/opt/nvim
+export PNPM_HOME="~/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+export EDITOR=nvim
+
 
 # usar bat como pager para man y otras herramientas
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
@@ -81,6 +103,7 @@ alias lla='lsd -lha --group-dirs=first'
 alias ls='lsd --group-dirs=first'
 alias icat="kitty +kitten icat"
 alias cat='batcat'
+alias npm='echo "❌ Use pnpm instead of npm"'
 [ "$TERM" = "xterm-kitty" ] && alias ssh='kitty +kitten ssh'
 
 
@@ -115,6 +138,18 @@ _zoxide_fzf_complete() {
 zstyle ':completion:*' menu select=2
 zstyle ':completion:*:functions:*:cd:*' completer _zoxide_fzf_complete
 zstyle ':completion:*:functions:*:_cd:*' completer _zoxide_fzf_complete
+
+# Shell Wrapper Yazi 
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
+# End Shell Wrapper
 
 # MI FUNCIÓN PERSONALIZADA Y BINDING PARA CTRL+O
 # ------------------------------------------------------------------------------
@@ -243,6 +278,16 @@ fzf-open-file() {
     # 6. Abrir los archivos seleccionados
     "$editor_cmd" "${files_to_open[@]}"
     return $?
+}
+
+# Función para correr Whisper en contenedor
+whisper(){
+    # -v $(pwd):/app: Monta el directorio actual par leer/scribir archivos
+    # --userns=keep-id: Mantiene tu UID de usuario (eviota problemas de permisos en los archivos generados)
+    podman run --rm -it \
+        --userns=keep-id \
+        -v "$(pwd):/app" \
+        whisper-cli "$@"
 }
 
 zle -N fzf-open-file

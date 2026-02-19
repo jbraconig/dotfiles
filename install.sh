@@ -89,7 +89,7 @@ configure_plugins() {
 
 configure_system() {
     if [ -f "$DOTFILES_DIR/setup_amd_debian13.sh" ]; then
-        echo "Configuración del sistema AMD para Debian 13 (requiere sudo)..."
+        echo "Configuración del sistema (Dependencias, Fuentes, Drivers AMD) para Debian 13..."
         read -p "¿Deseas ejecutar la configuración del sistema AMD usando sudo? (s/N): " response
         if [[ "$response" =~ ^([sS][iI]?|[yY])$ ]]; then
             bash "$DOTFILES_DIR/setup_amd_debian13.sh"
