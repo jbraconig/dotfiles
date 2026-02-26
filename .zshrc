@@ -104,7 +104,8 @@ alias ls='lsd --group-dirs=first'
 alias icat="kitty +kitten icat"
 alias cat='batcat'
 alias npm='echo "❌ Use pnpm instead of npm"'
-[ "$TERM" = "xterm-kitty" ] && alias ssh='kitty +kitten ssh'
+# [ "$TERM" = "xterm-kitty" ] && alias ssh='kitty +kitten ssh'
+[ "$TERM" = "xterm-ghostty" ] && alias ssh='TERM=xterm-256color ssh'
 
 
 # Plugins

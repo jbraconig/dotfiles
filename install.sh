@@ -16,6 +16,11 @@ configure_configs() {
     echo "Configurando Kitty..."
     ln -sf "$DOTFILES_DIR/.config/kitty" "$USER_HOME/.config/kitty"
 
+    echo "Configurando Ghostty..."
+    mkdir -p "$USER_HOME/.config/ghostty"
+    ln -sf "$DOTFILES_DIR/.config/ghostty/config.ghostty" "$USER_HOME/.config/ghostty/config.ghostty"
+
+
     echo "Configurando tema personalizado de Visual Studio Code..."
     mkdir -p "$USER_HOME/.vscode/extensions/"
     ln -sf "$DOTFILES_DIR/.vscode/extensions/kittynordic-theme" "$USER_HOME/.vscode/extensions/kittynordic-theme"
@@ -134,6 +139,14 @@ validate_config() {
         echo "✗ Kitty no está configurado correctamente."
     fi
 
+    # Check Ghostty
+    if [ -d "$USER_HOME/.config/ghostty" ] && [ -L "$USER_HOME/.config/ghostty/config.ghostty" ] && [ "$(readlink "$USER_HOME/.config/ghostty/config.ghostty")" = "$DOTFILES_DIR/.config/ghostty/config.ghostty" ]; then
+        echo "✓ Ghostty configurado correctamente."
+    else
+        echo "✗ Ghostty no está configurado correctamente."
+    fi
+
+
     # Check VS Code theme
     if [ -L "$USER_HOME/.vscode/extensions/kittynordic-theme" ] && [ "$(readlink "$USER_HOME/.vscode/extensions/kittynordic-theme")" = "$DOTFILES_DIR/.vscode/extensions/kittynordic-theme" ]; then
         echo "✓ Tema de VS Code configurado correctamente."
@@ -202,7 +215,7 @@ validate_config() {
 while true; do
     echo ""
     echo "Menú de instalación de dotfiles:"
-    echo "1. Configurar configuraciones (.config, Neovim, Kitty, VS Code tema, Zsh)"
+    echo "1. Configurar configuraciones (.config, Neovim, Kitty, Ghostty, VS Code tema, Zsh)"
     echo "2. Configurar plugins de Zsh"
     echo "3. Configurar sistema AMD (Debian 13)"
     echo "4. Configurar scripts (enlaces en /usr/local/bin)"
